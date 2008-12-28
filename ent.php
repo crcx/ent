@@ -10,6 +10,7 @@
    offers:
 
      - Wikipedia
+     - Definitions
      - Content of web pages
      - News feed (RSS from NPR)
      - UPS Tracking
@@ -87,6 +88,23 @@ for ($n = 0; $n < $mbox->size(); $n++) {
     }
 
 
+    /* Dictionary Lookup */
+    if ($type == "none")
+    {
+      $a = preg_match('/Subject: [dD][eE][fF][iI][nN][eE] (.*)$/m', $message, $matches);
+      $subject = $matches[1];
+      if ($a == 1)
+      {
+        $url = str_replace(" ", "%20", $subject);
+        $type = "define";
+        $html = get_url_contents("http://en.wiktionary.org/w/index.php?printable=yes&title=" . $url);
+        $body = html2text($html);
+        $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+        mail($who, "Definition of " . $subject, $body, $header);
+      }
+    }
+
+
     /* RSS: General News */
     if ($type == "none")
     {
@@ -145,6 +163,7 @@ for ($n = 0; $n < $mbox->size(); $n++) {
         $body = "Ent Services\n\n";
         $body .= "Send an email with one of the following in the subject line.\n\n";
         $body .= "lookup word or phrase\nGet a Wikipedia article on the requested word or phrase.\n\n";
+        $body .= "define word\nGet the defintion of the requested word.\n\n";
         $body .= "www site\nGet the contents of the requested website.\n\n";
         $body .= "news\nGet the top stories from NPR.\n\n";
         $body .= "ups tracking-number\nObtain tracking information for a UPS shipment.\n\n";

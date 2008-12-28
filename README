@@ -8,6 +8,7 @@ This is a tool to provide services via email. At present it
 offers:
 
   - Wikipedia
+  - Definitions
   - Content of web pages
   - News (top stories from NPR)
   - UPS tracking information
