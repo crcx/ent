@@ -12,6 +12,7 @@
      - Wikipedia
      - Content of web pages
      - News feed (RSS from NPR)
+     - UPS Tracking
      - A Help summary
 
    How it works:
@@ -117,6 +118,23 @@ for ($n = 0; $n < $mbox->size(); $n++) {
       }
     }
 
+
+    /* UPS Tracking */
+    if ($type == "none")
+    {
+      $a = preg_match('/Subject: [uU][pP][sS] (.*)$/m', $message, $matches);
+      $subject = $matches[1];
+      if ($a == 1)
+      {
+        $type = "ups";
+        $html = get_url_contents("http://iship.com/trackit/track.aspx?T=1&Track=" . $subject . "&ACCT=AISHIP&TP=I&TSubmit=Submit");
+        $body = html2text($html);
+        $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+        mail($who, "UPS Status for " . $subject, $body, $header);
+      }
+    }
+
+
     /* Help */
     if ($type == "none")
     {
@@ -126,9 +144,10 @@ for ($n = 0; $n < $mbox->size(); $n++) {
       {
         $body = "Ent Services\n\n";
         $body .= "Send an email with one of the following in the subject line.\n\n";
-        $body .= "lookup <word or phrase>\nGet a Wikipedia article on the requested word or phrase.\n\n";
+        $body .= "lookup word or phrase\nGet a Wikipedia article on the requested word or phrase.\n\n";
         $body .= "www site\nGet the contents of the requested website.\n\n";
         $body .= "news\nGet the top stories from NPR.\n\n";
+        $body .= "ups tracking-number\nObtain tracking information for a UPS shipment.\n\n";
         $body .= "help\nGet a copy of this text.";
         $type = "help";
         $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields

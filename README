@@ -9,6 +9,9 @@ offers:
 
   - Wikipedia
   - Content of web pages
+  - News (top stories from NPR)
+  - UPS tracking information
+  - Integrated help
 
 How it works:
 
@@ -16,10 +19,6 @@ How it works:
   - This code gets run somehow (I use a cron job)
   - It parses an mbox file. (/var/mail/ent for me)
   - The requests are taken from the subject line
-     - LOOKUP <phrase>
-       Returns the Wikipedia page for <phrase>
-     - WWW <site>
-       Returns the contents of <site>
   - Requests can be mixed case
     - The results are emailed back to you and your message is
       removed from the mbox
