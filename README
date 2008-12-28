@@ -4,8 +4,8 @@
 |       |  \ |     |
 +-----  |   \|     |
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-This is a tool to provide services via email. At present it
-offers:
+Ent is an application providing tools and services via an
+email interface. At present it offers:
 
   - Wikipedia
   - Definitions
@@ -21,8 +21,8 @@ How it works:
   - It parses an mbox file. (/var/mail/ent for me)
   - The requests are taken from the subject line
   - Requests can be mixed case
-    - The results are emailed back to you and your message is
-      removed from the mbox
+  - The results are emailed back to you and your message is
+    removed from the mbox
 
 The code uses several pieces of code written by others. See
 the individual files for copyright/license information.
