@@ -105,6 +105,23 @@ for ($n = 0; $n < $mbox->size(); $n++) {
     }
 
 
+    /* Weather */
+    if ($type == "none")
+    {
+      $a = preg_match('/Subject: [wW][eE][aA][tT][hH][eE][rR] (.*)$/m', $message, $matches);
+      $subject = $matches[1];
+      if ($a == 1)
+      {
+        $url = str_replace(" ", "%20", $subject);
+        $type = "weather";
+        $html = get_url_contents("http://m.wund.com/cgi-bin/findweather/getForecast?brand=mobile&query=" . $url);
+        $body = html2text($html);
+        $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+        mail($who, "Weather for " . $subject, $body, $header);
+      }
+    }
+
+
     /* RSS: General News */
     if ($type == "none")
     {
@@ -165,6 +182,7 @@ for ($n = 0; $n < $mbox->size(); $n++) {
         $body .= "lookup word or phrase\nGet a Wikipedia article on the requested word or phrase.\n\n";
         $body .= "define word\nGet the defintion of the requested word.\n\n";
         $body .= "www site\nGet the contents of the requested website.\n\n";
+        $body .= "weather zipcode\nGet the current weather forecast for the requested area.\n\n";
         $body .= "news\nGet the top stories from NPR.\n\n";
         $body .= "ups tracking-number\nObtain tracking information for a UPS shipment.\n\n";
         $body .= "help\nGet a copy of this text.";
@@ -175,7 +193,7 @@ for ($n = 0; $n < $mbox->size(); $n++) {
     }
 
 
-    if ($type == "none")      
+    if ($type == "none")
     {
       $body = "Sorry, but Ent wasn't able to understand your request.";
       $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
