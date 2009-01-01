@@ -1,0 +1,43 @@
+<?php
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   +-----  .    .  -------
+   |       |\   |     |
+   +---    | \  |     |
+   |       |  \ |     |
+   +-----  |   \|     |
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Usage:
+     help
+
+   Returns:
+     Help on using Ent
+
+   Author:
+     Charles Childers  <charles.childers@gmail.com>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  /* Help */
+  if ($type == "none")
+  {
+    $a = preg_match('/Subject: [hH][eE][lL][pP](.*)$/m', $message, $matches);
+    $subject = $matches[1];
+    if ($a == 1)
+    {
+      $body = "Ent Services\n\n";
+      $body .= "Send an email with one of the following in the subject line.\n\n";
+      $body .= "lookup word or phrase\nGet a Wikipedia article on the requested word or phrase.\n\n";
+      $body .= "define word\nGet the defintion of the requested word.\n\n";
+      $body .= "www site\nGet the contents of the requested website.\n\n";
+      $body .= "weather zipcode or city, state\nGet the current weather forecast for the requested area.\n\n";
+      $body .= "news\nGet the top stories from NPR.\n\n";
+      $body .= "worldnews\nGet the top world news stories from NPR.\n\n";
+      $body .= "usnews\nGet the top U.S. stories from NPR.\n\n";
+      $body .= "bbc\nBBC News Front Page\n\n";
+      $body .= "ups tracking-number\nObtain tracking information for a UPS shipment.\n\n";
+      $body .= "help\nGet a copy of this text.";
+      $type = "help";
+      $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+      mail($who, "Help on using Ent" . $subject, $body, $header);
+    }
+  }
+?>
+

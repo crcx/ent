@@ -1,0 +1,46 @@
+<?php
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   +-----  .    .  -------
+   |       |\   |     |
+   +---    | \  |     |
+   |       |  \ |     |
+   +-----  |   \|     |
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Usage:
+     bbc
+
+   Returns:
+     Top stories from BBC
+
+   Author:
+     Charles Childers  <charles.childers@gmail.com>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  if ($type == "none")
+  {
+    $a = preg_match('/Subject: [bB][bB][cC](.*)$/m', $message, $matches);
+    $subject = $matches[1];
+    if ($a == 1)
+    {
+      $rss = new lastRSS;
+      $rss->cache_dir = '/tmp';
+      $rss->cache_time = 60;
+      $body = "";
+      $type = "rss-news";
+      if ($rs = $rss->get('http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml'))
+      {
+        $body = "Feed for $rs[title]\n\n";
+        foreach($rs['items'] as $item)
+        {
+          $body .= "== " . $item['title'] . " ==\n";
+          $body .= $item['description'] . "\n\n";
+        }
+      }
+     else
+     {
+       $body = "Error: Unable to load RSS feed!\n";
+     }
+     $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+     mail($who, "BBC News (Front Page)" . $subject, $body, $header);
+    }
+  }
+?>

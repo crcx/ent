@@ -6,15 +6,8 @@
    |       |  \ |     |
    +-----  |   \|     |
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   This is a tool to provide services via email. At present it
-   offers:
-
-     - Wikipedia
-     - Definitions
-     - Content of web pages
-     - News feed (RSS from NPR)
-     - UPS Tracking
-     - A Help summary
+   Ent is an application providing tools and services via an
+   email interface.
 
    How it works:
 
@@ -42,167 +35,37 @@ $file = '/var/mail/ent';
 
 $filter = array("<", ">");
 
-echo 'Using file ' . $file . "\n";
-
 $mbox = new Mail_Mbox($file);
 $mbox->open();
 
-for ($n = 0; $n < $mbox->size(); $n++) {
-    $type = "none";
-    $message = $mbox->get($n);
+for ($n = 0; $n < $mbox->size(); $n++)
+{
+  $type = "none";
+  $message = $mbox->get($n);
 
-    preg_match('/Return-path: (.*)$/m', $message, $returns);
-    $who = str_replace($filter, "", $returns[1]);
+  preg_match('/Return-path: (.*)$/m', $message, $returns);
+  $who = str_replace($filter, "", $returns[1]);
 
-    /* Websites */
-    if ($type == "none")
-    {
-      $a = preg_match('/Subject: [wW][wW][wW] (.*)$/m', $message, $matches);
-      $subject = $matches[1];
-      if ($a == 1)
-      {
-        $url = str_replace(" ", "%20", $subject);
-        $type = "web";
-        $html = get_url_contents($url);
-        $body = html2text($html);
-        $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-        mail($who, "Content of " . $subject, $body, $header);
-      }
-    }
+  include 'leaves/www.leaf';
+  include 'leaves/lookup.leaf';
+  include 'leaves/define.leaf';
+  include 'leaves/weather.leaf';
+  include 'leaves/news.leaf';
+  include 'leaves/worldnews.leaf';
+  include 'leaves/usnews.leaf';
+  include 'leaves/bbc.leaf';
+  include 'leaves/ups.leaf';
+  include 'leaves/help.leaf';
 
+  if ($type == "none")
+  {
+    $body = "Sorry, but Ent wasn't able to understand your request.";
+    $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+    mail($who, "Sorry..." . $subject, $body, $header);
+  }
 
-    /* Wikipedia Lookup */
-    if ($type == "none")
-    {
-      $a = preg_match('/Subject: [lL][oO][oO][kK][uU][pP] (.*)$/m', $message, $matches);
-      $subject = $matches[1];
-      if ($a == 1)
-      {
-        $url = str_replace(" ", "%20", $subject);
-        $type = "lookup";
-        $html = get_url_contents("http://en.wikipedia.org/w/index.php?printable=yes\&title=" . $url);
-        $body = html2text($html);
-        $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-        mail($who, "Wikipedia: " . $subject, $body, $header);
-      }
-    }
-
-
-    /* Dictionary Lookup */
-    if ($type == "none")
-    {
-      $a = preg_match('/Subject: [dD][eE][fF][iI][nN][eE] (.*)$/m', $message, $matches);
-      $subject = $matches[1];
-      if ($a == 1)
-      {
-        $url = str_replace(" ", "%20", $subject);
-        $type = "define";
-        $html = get_url_contents("http://en.wiktionary.org/w/index.php?printable=yes&title=" . $url);
-        $body = html2text($html);
-        $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-        mail($who, "Definition of " . $subject, $body, $header);
-      }
-    }
-
-
-    /* Weather */
-    if ($type == "none")
-    {
-      $a = preg_match('/Subject: [wW][eE][aA][tT][hH][eE][rR] (.*)$/m', $message, $matches);
-      $subject = $matches[1];
-      if ($a == 1)
-      {
-        $url = str_replace(" ", "%20", $subject);
-        $type = "weather";
-        $html = get_url_contents("http://m.wund.com/cgi-bin/findweather/getForecast?brand=mobile&query=" . $url);
-        $body = html2text($html);
-        $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-        mail($who, "Weather for " . $subject, $body, $header);
-      }
-    }
-
-
-    /* RSS: General News */
-    if ($type == "none")
-    {
-      $a = preg_match('/Subject: [nN][eE][wW][sS](.*)$/m', $message, $matches);
-      $subject = $matches[1];
-      if ($a == 1)
-      {
-        $rss = new lastRSS;
-        $rss->cache_dir = '/tmp';
-        $rss->cache_time = 60;
-
-        $body = "";
-        $type = "rss-news";
-        if ($rs = $rss->get('http://www.npr.org/rss/rss.php?id=1001'))
-        {
-          $body = "Feed for $rs[title]\n\n";
-          foreach($rs['items'] as $item)
-          {
-            $body .= "== " . $item['title'] . " ==\n";
-            $body .= $item['description'] . "\n\n";
-          }
-        }
-       else
-       {
-         $body = "Error: Unable to load RSS feed!\n";
-       }
-       $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-       mail($who, "Latest News" . $subject, $body, $header);
-      }
-    }
-
-
-    /* UPS Tracking */
-    if ($type == "none")
-    {
-      $a = preg_match('/Subject: [uU][pP][sS] (.*)$/m', $message, $matches);
-      $subject = $matches[1];
-      if ($a == 1)
-      {
-        $type = "ups";
-        $html = get_url_contents("http://iship.com/trackit/track.aspx?T=1&Track=" . $subject . "&ACCT=AISHIP&TP=I&TSubmit=Submit");
-        $body = html2text($html);
-        $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-        mail($who, "UPS Status for " . $subject, $body, $header);
-      }
-    }
-
-
-    /* Help */
-    if ($type == "none")
-    {
-      $a = preg_match('/Subject: [hH][eE][lL][pP](.*)$/m', $message, $matches);
-      $subject = $matches[1];
-      if ($a == 1)
-      {
-        $body = "Ent Services\n\n";
-        $body .= "Send an email with one of the following in the subject line.\n\n";
-        $body .= "lookup word or phrase\nGet a Wikipedia article on the requested word or phrase.\n\n";
-        $body .= "define word\nGet the defintion of the requested word.\n\n";
-        $body .= "www site\nGet the contents of the requested website.\n\n";
-        $body .= "weather zipcode\nGet the current weather forecast for the requested area.\n\n";
-        $body .= "news\nGet the top stories from NPR.\n\n";
-        $body .= "ups tracking-number\nObtain tracking information for a UPS shipment.\n\n";
-        $body .= "help\nGet a copy of this text.";
-        $type = "help";
-        $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-        mail($who, "Help on using Ent" . $subject, $body, $header);
-      }
-    }
-
-
-    if ($type == "none")
-    {
-      $body = "Sorry, but Ent wasn't able to understand your request.";
-      $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-      mail($who, "Sorry..." . $subject, $body, $header);
-    }
-
-    $mbox->remove($n);
+  $mbox->remove($n);
 }
 
 $mbox->close();
 ?>
-
