@@ -7,7 +7,7 @@
    +-----  |   \|     |
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    Usage:
-     bbc
+     bbcnews
 
    Returns:
      Top stories from BBC

@@ -53,7 +53,7 @@ for ($n = 0; $n < $mbox->size(); $n++)
   include 'leaves/news.leaf';
   include 'leaves/worldnews.leaf';
   include 'leaves/usnews.leaf';
-  include 'leaves/bbc.leaf';
+  include 'leaves/bbcnews.leaf';
   include 'leaves/ups.leaf';
   include 'leaves/help.leaf';
 

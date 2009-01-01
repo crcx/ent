@@ -31,7 +31,7 @@
       $body .= "news\nGet the top stories from NPR.\n\n";
       $body .= "worldnews\nGet the top world news stories from NPR.\n\n";
       $body .= "usnews\nGet the top U.S. stories from NPR.\n\n";
-      $body .= "bbc\nBBC News Front Page\n\n";
+      $body .= "bbcnews\nBBC News Front Page\n\n";
       $body .= "ups tracking-number\nObtain tracking information for a UPS shipment.\n\n";
       $body .= "help\nGet a copy of this text.";
       $type = "help";
