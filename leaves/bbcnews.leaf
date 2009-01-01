@@ -17,7 +17,7 @@
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   if ($type == "none")
   {
-    $a = preg_match('/Subject: [bB][bB][cC](.*)$/m', $message, $matches);
+    $a = preg_match('/Subject: [bB][bB][cC][nN][eE][wW][sS](.*)$/m', $message, $matches);
     $subject = $matches[1];
     if ($a == 1)
     {
