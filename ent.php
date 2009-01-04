@@ -46,6 +46,7 @@ for ($n = 0; $n < $mbox->size(); $n++)
   preg_match('/Return-path: (.*)$/m', $message, $returns);
   $who = str_replace($filter, "", $returns[1]);
 
+  /* Stable */
   include 'leaves/www.leaf';
   include 'leaves/lookup.leaf';
   include 'leaves/define.leaf';
@@ -56,6 +57,16 @@ for ($n = 0; $n < $mbox->size(); $n++)
   include 'leaves/bbcnews.leaf';
   include 'leaves/ups.leaf';
   include 'leaves/help.leaf';
+
+  /* Beta */
+  include 'leaves/ustime.leaf';
+  include 'leaves/man.leaf';
+  include 'leaves/quotes.leaf';
+  include 'leaves/c2.leaf';
+  include 'leaves/fedex.leaf';
+  include 'leaves/freshmeat.leaf';
+  include 'leaves/bible.leaf';
+  
 
   if ($type == "none")
   {

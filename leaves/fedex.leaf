@@ -6,29 +6,28 @@
    |       |  \ |     |
    +-----  |   \|     |
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   *** NOT WORKING YET ***
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    Usage:
-     weather zipcode or city, state
+     fedex tracking number
 
    Returns:
-     Current weather and short-term forecast from
-     wunderground
+     FedEx tracking information
 
    Author:
      Charles Childers  <charles.childers@gmail.com>
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   if ($type == "none")
   {
-    $a = preg_match('/Subject: [wW][eE][aA][tT][hH][eE][rR] (.*)$/m', $message, $matches);
+    $a = preg_match('/Subject: [fF][eE][dD][eE][xX] (.*)$/m', $message, $matches);
     $subject = $matches[1];
     if ($a == 1)
     {
-      $url = str_replace(" ", "%20", $subject);
-      $type = "weather";
-      $html = get_url_contents("http://m.wund.com/cgi-bin/findweather/getForecast?brand=mobile&query=" . $url);
-      $content = preg_replace("/.*<body[^>]*>|<\/body>.*/si", "", $html);
-      $body = html2text($content);
+      $type = "fedex";
+      $html = get_url_contents("https://www.fedex.com/mobi/track.do?trackingNbr=" . $subject);
+      $body = html2text($html);
       $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-      mail($who, "Weather for " . $subject, $body, $header);
+      mail($who, "FedEx Status for " . $subject, $body, $header);
     }
   }
 ?>

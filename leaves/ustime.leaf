@@ -7,29 +7,25 @@
    +-----  |   \|     |
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    Usage:
-     weather zipcode or city, state
+     ustime
 
    Returns:
-     Current weather and short-term forecast from
-     wunderground
+     Current time in all US timezones
 
    Author:
      Charles Childers  <charles.childers@gmail.com>
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   if ($type == "none")
   {
-    $a = preg_match('/Subject: [wW][eE][aA][tT][hH][eE][rR] (.*)$/m', $message, $matches);
+    $a = preg_match('/Subject: [uU][sS][tT][iI][mM][eE](.*)$/m', $message, $matches);
     $subject = $matches[1];
     if ($a == 1)
     {
-      $url = str_replace(" ", "%20", $subject);
-      $type = "weather";
-      $html = get_url_contents("http://m.wund.com/cgi-bin/findweather/getForecast?brand=mobile&query=" . $url);
-      $content = preg_replace("/.*<body[^>]*>|<\/body>.*/si", "", $html);
-      $body = html2text($content);
+      $type = "ustime";
+      $html = get_url_contents("http://tycho.usno.navy.mil/cgi-bin/timer.pl");
+      $body = html2text($html);
       $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-      mail($who, "Weather for " . $subject, $body, $header);
+      mail($who, "Current time across the US", $body, $header);
     }
   }
 ?>
-

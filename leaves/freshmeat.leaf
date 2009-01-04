@@ -7,17 +7,17 @@
    +-----  |   \|     |
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    Usage:
-     worldnews
+     freshmeat
 
    Returns:
-     World News from NPR
+     Latest releases from freshmeat.net
 
    Author:
      Charles Childers  <charles.childers@gmail.com>
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   if ($type == "none")
   {
-    $a = preg_match('/Subject: [wW][oO][rR][lL][dD][nN][eE][wW][sS](.*)$/m', $message, $matches);
+    $a = preg_match('/Subject: [fF][rR][eE][sS][hH][mM][eE][aA][tT](.*)$/m', $message, $matches);
     $subject = $matches[1];
     if ($a == 1)
     {
@@ -26,7 +26,7 @@
       $rss->cache_time = 60;
       $body = "";
       $type = "rss-news";
-      if ($rs = $rss->get('http://www.npr.org/rss/rss.php?id=1004'))
+      if ($rs = $rss->get('http://freshmeat.net/backend/fm-releases-global.xml'))
       {
         $body = "Feed for $rs[title]\n\n";
         foreach($rs['items'] as $item)
@@ -40,7 +40,7 @@
        $body = "Error: Unable to load RSS feed!\n";
      }
      $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-     mail($who, "World News from NPR", $body, $header);
+     mail($who, "Latest Releases at Freshmeat.net", $body, $header);
     }
   }
 ?>

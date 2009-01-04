@@ -24,7 +24,7 @@
     {
       $url = str_replace(" ", "%20", $subject);
       $type = "lookup";
-      $html = get_url_contents("http://en.wikipedia.org/w/index.php?printable=yes\&title=" . $url);
+      $html = get_url_contents("http://en.wikipedia.org/w/index.php?printable=yes&title=" . $url);
       $body = html2text($html);
       $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
       mail($who, "Wikipedia: " . $subject, $body, $header);

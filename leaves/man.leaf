@@ -7,29 +7,26 @@
    +-----  |   \|     |
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    Usage:
-     weather zipcode or city, state
+     man page
 
    Returns:
-     Current weather and short-term forecast from
-     wunderground
+     A manpage
 
    Author:
      Charles Childers  <charles.childers@gmail.com>
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   if ($type == "none")
   {
-    $a = preg_match('/Subject: [wW][eE][aA][tT][hH][eE][rR] (.*)$/m', $message, $matches);
+    $a = preg_match('/Subject: [mM][aA][nN] (.*)$/m', $message, $matches);
     $subject = $matches[1];
     if ($a == 1)
     {
       $url = str_replace(" ", "%20", $subject);
-      $type = "weather";
-      $html = get_url_contents("http://m.wund.com/cgi-bin/findweather/getForecast?brand=mobile&query=" . $url);
-      $content = preg_replace("/.*<body[^>]*>|<\/body>.*/si", "", $html);
-      $body = html2text($content);
+      $type = "man";
+      $html = get_url_contents("http://www.softlab.ntua.gr/cgi-bin/man-cgi?" . $url);
+      $body = html2text($html);
       $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-      mail($who, "Weather for " . $subject, $body, $header);
+      mail($who, "Man page for " . $subject, $body, $header);
     }
   }
 ?>
-

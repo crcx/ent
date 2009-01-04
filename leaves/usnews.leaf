@@ -40,7 +40,7 @@
        $body = "Error: Unable to load RSS feed!\n";
      }
      $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-     mail($who, "Latest News (U.S.A.)" . $subject, $body, $header);
+     mail($who, "Top US Stories from NPR", $body, $header);
     }
   }
 ?>
