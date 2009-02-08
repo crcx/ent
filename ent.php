@@ -71,13 +71,6 @@ for ($n = 0; $n < $mbox->size(); $n++)
     mail($who, "Sorry...", $body, $header);
   }
 
-  if ($who != "crc.platypus@gmail.com")
-  {
-    $A = preg_match('/Subject:(.*)$/m', $message, $matches);
-    $subject = $matches[1];
-    mail("charles.childers@gmail.com", "Ent Used by " . $who, "Query: " . $subject);
-  }
-
   $mbox->remove($n);
 }
 
