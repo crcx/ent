@@ -4,15 +4,20 @@
 |       |  \ |     |
 +-----  |   \|     |
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Ent is an application providing tools and services via an
-email interface. At present it offers:
+Ent provides services and tools via email.
 
   - Wikipedia
   - Definitions
   - Content of web pages
   - Weather
-  - News (top stories from NPR)
+  - News (NPR, BBC, NYTIMES, FRESHMEAT)
   - UPS tracking information
+  - Translation (English/Spanish)
+  - Quotes
+  - c2 wiki
+  - Manpages
+  - Time & Date
+  - Zipcode information
   - Integrated help
 
 How it works:
@@ -28,5 +33,5 @@ How it works:
 The code uses several pieces of code written by others. See
 the individual files for copyright/license information.
 
-This code was written by Charles Childers and is gifted to
-the public domain.
+The core Ent code was written by Charles Childers and is
+gifted to the public domain.
