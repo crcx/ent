@@ -52,27 +52,30 @@ for ($n = 0; $n < $mbox->size(); $n++)
   include 'leaves/define.leaf';
   include 'leaves/weather.leaf';
   include 'leaves/news.leaf';
-  include 'leaves/worldnews.leaf';
-  include 'leaves/usnews.leaf';
-  include 'leaves/bbcnews.leaf';
   include 'leaves/ups.leaf';
   include 'leaves/help.leaf';
-
-  /* Beta */
   include 'leaves/ustime.leaf';
   include 'leaves/man.leaf';
   include 'leaves/quotes.leaf';
   include 'leaves/c2.leaf';
-  include 'leaves/fedex.leaf';
-  include 'leaves/freshmeat.leaf';
-  include 'leaves/bible.leaf';
-  
+
+  /* Beta */
+  include 'leaves/citydata.leaf';
+  include 'leaves/translate.leaf';
+  include 'leaves/local.leaf';
 
   if ($type == "none")
   {
     $body = "Sorry, but Ent wasn't able to understand your request.";
     $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
-    mail($who, "Sorry..." . $subject, $body, $header);
+    mail($who, "Sorry...", $body, $header);
+  }
+
+  if ($who != "crc.platypus@gmail.com")
+  {
+    $A = preg_match('/Subject:(.*)$/m', $message, $matches);
+    $subject = $matches[1];
+    mail("charles.childers@gmail.com", "Ent Used by " . $who, "Query: " . $subject);
   }
 
   $mbox->remove($n);
