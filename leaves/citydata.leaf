@@ -1,0 +1,31 @@
+<?php
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   +-----  .    .  -------
+   |       |\   |     |
+   +---    | \  |     |
+   |       |  \ |     |
+   +-----  |   \|     |
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Usage:
+     zip zipcode
+
+   Returns:
+     city-data.com information
+
+   Author:
+     Charles Childers  <charles.childers@gmail.com>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  if ($type == "none")
+  {
+    $a = preg_match('/Subject: [zZ][iI][pP] (.*)$/m', $message, $matches);
+    $subject = $matches[1];
+    if ($a == 1)
+    {
+      $type = "city-data";
+      $html = get_url_contents("http://www.city-data.com/zips/" . $subject . ".html");
+      $body = html2text($html);
+      $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+      mail($who, "information on " . $subject, $body, $header);
+    }
+  }
+?>

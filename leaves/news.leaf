@@ -1,0 +1,129 @@
+<?php
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   +-----  .    .  -------
+   |       |\   |     |
+   +---    | \  |     |
+   |       |  \ |     |
+   +-----  |   \|     |
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Usage:
+     news [type]
+
+   Returns:
+     News Headlines/summaries
+
+   Author:
+     Charles Childers  <charles.childers@gmail.com>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  if ($type == "none")
+  {
+
+    /* NPR */
+    $feed[1] = 'http://www.npr.org/rss/rss.php?id=1001';     /* Top Stories */
+    $feed[2] = 'http://www.npr.org/rss/rss.php?id=1003';     /* US News */
+    $feed[3] = 'http://www.npr.org/rss/rss.php?id=1004';     /* World News */
+
+    /* BBC Top Stories */
+    $feed[4] = 'http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml';
+
+    /* NY Times */
+    $feed[5] = 'http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml';
+
+    $feed[6] = 'http://freshmeat.net/backend/fm.rdf';
+    $feed[7] = 'http://feeds.reuters.com/reuters/topNews';
+
+    $feed[8] = 'http://boards.getpeek.com/?Feed=RSS2';
+
+
+    $a = preg_match('/Subject: [nN][eE][wW][sS](.*)$/m', $message, $matches);
+    $subject = $matches[1];
+    if ($a == 1)
+    {
+      $source = $feed[1];
+
+      $a = preg_match('/ [uU][sS](.*)$/m', $subject, $matches);
+      if ($a == 1)
+      {
+         $source = $feed[2];
+      }
+
+      $a = preg_match('/ [wW][oO][rR][lL][dD](.*)$/m', $subject, $matches);
+      if ($a == 1)
+      {
+         $source = $feed[3];
+      }
+
+      $a = preg_match('/ [bB][bB][cC](.*)$/m', $subject, $matches);
+      if ($a == 1)
+      {
+         $source = $feed[4];
+      }
+
+      $a = preg_match('/ [nN][yY][tT][iI][mM][eE][sS](.*)$/m', $subject, $matches);
+      if ($a == 1)
+      {
+         $source = $feed[5];
+      }
+
+      $a = preg_match('/ [fF][rR][eE][sS][hH][mM][eE][aA][tT](.*)$/m', $subject, $matches);
+      if ($a == 1)
+      {
+         $source = $feed[6];
+      }
+
+      $a = preg_match('/ [rR][eE][uU][tT][eE][rR][sS](.*)$/m', $subject, $matches);
+      if ($a == 1)
+      {
+         $source = $feed[7];
+      }
+
+      $a = preg_match('/ [pP][eE][eE][kK](.*)$/m', $subject, $matches);
+      if ($a == 1)
+      {
+         $source = $feed[8];
+      }
+
+
+      $rss = new lastRSS;
+      $rss->cache_dir = '/tmp';
+      $rss->cache_time = 60;
+      $body = "";
+      $type = "rss-news";
+      if ($rs = $rss->get($source))
+      {
+        $body = "Feed for $rs[title]\n\n";
+        foreach($rs['items'] as $item)
+        {
+          $body .= "== " . $item['title'] . " ==\n";
+          $body .= $item['description'] . "\n\n";
+        }
+      }
+     else
+     {
+       $body = "Error: Unable to load RSS feed!\n";
+     }
+
+     $b = $body;
+     $c = str_replace("&lt;strong&gt;", "", $b);
+     $b = str_replace("&lt;em&gt;", "", $c);
+     $c = str_replace("&lt;/strong&gt;", "", $b);
+     $b = str_replace("&lt;/em&gt;", "", $c);
+     $c = str_replace("&lt;", "<", $b);
+     $b = str_replace("&gt;", ">", $c);
+     $c = str_replace("<hr>", "\n", $b);
+     $b = str_replace("<hr/>", "\n", $c);
+     $c = str_replace("<hr />", "\n", $b);
+     $b = str_replace("<br />", "\n", $c);
+     $c = str_replace("<br>", "\n", $b);
+     $b = str_replace("<br/>", "\n", $c);
+     $c = utf8_html_entity_decode($b);
+
+     $b = strip_tags($c);
+
+     $body = $b;
+
+     $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+     mail($who, "Recent Headlines", $body, $header);
+    }
+  }
+?>

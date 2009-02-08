@@ -1,0 +1,45 @@
+<?php
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   +-----  .    .  -------
+   |       |\   |     |
+   +---    | \  |     |
+   |       |  \ |     |
+   +-----  |   \|     |
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Usage:
+     irc-retro date
+     irc-forth date
+
+   Returns:
+     irc logs
+
+   Author:
+     Charles Childers  <charles.childers@gmail.com>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  if ($type == "none")
+  {
+    $a = preg_match('/Subject: [iI][rR][cC]-[rR][eE][tT][rR][oO] (.*)$/m', $message, $matches);
+    $subject = $matches[1];
+    if ($a == 1)
+    {
+      $type = "irc";
+      $body = get_url_contents("http://tunes.org/~nef/logs/retro/" . $subject);
+      $header = "From: Ent <ent@retroforth.org>\r\n";
+      mail($who, "#retro log from " . $subject, $body, $header);
+    }
+  }
+
+
+  if ($type == "none")
+  {
+    $a = preg_match('/Subject: [iI][rR][cC]-[fF][oO][rR][tT][hH] (.*)$/m', $message, $matches);
+    $subject = $matches[1];
+    if ($a == 1)
+    {
+      $type = "irc";
+      $body = get_url_contents("http://tunes.org/~nef/logs/forth/" . $subject);
+      $header = "From: Ent <ent@retroforth.org>\r\n";
+      mail($who, "#forth log from " . $subject, $body, $header);
+    }
+  }
+?>

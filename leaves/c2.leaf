@@ -1,0 +1,31 @@
+<?php
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   +-----  .    .  -------
+   |       |\   |     |
+   +---    | \  |     |
+   |       |  \ |     |
+   +-----  |   \|     |
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Usage:
+     c2 page
+
+   Returns:
+     c2 wiki page
+
+   Author:
+     Charles Childers  <charles.childers@gmail.com>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  if ($type == "none")
+  {
+    $a = preg_match('/Subject: [cC]2 (.*)$/m', $message, $matches);
+    $subject = $matches[1];
+    if ($a == 1)
+    {
+      $type = "c2wiki";
+      $html = get_url_contents("http://c2.com/cgi/wiki?" . $subject);
+      $body = html2text($html);
+      $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+      mail($who, "c2 wiki: " . $subject, $body, $header);
+    }
+  }
+?>

@@ -1,0 +1,50 @@
+<?php
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   +-----  .    .  -------
+   |       |\   |     |
+   +---    | \  |     |
+   |       |  \ |     |
+   +-----  |   \|     |
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Usage:
+     help
+
+   Returns:
+     Help on using Ent
+
+   Author:
+     Charles Childers  <charles.childers@gmail.com>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  /* Help */
+  if ($type == "none")
+  {
+    $a = preg_match('/Subject: [hH][eE][lL][pP](.*)$/m', $message, $matches);
+    $subject = $matches[1];
+    if ($a == 1)
+    {
+      $body = "Ent Services\n\n";
+      $body .= "Send an email with one of the following in the subject line.\n\n";
+      $body .= "lookup word or phrase\nGet a Wikipedia article on the requested word or phrase.\n\n";
+      $body .= "define word\nGet the defintion of the requested word.\n\n";
+      $body .= "www site\nGet the contents of the requested website.\n\n";
+      $body .= "weather zipcode or city, state\nGet the current weather forecast for the requested area.\n\n";
+      $body .= "news [us | world | bbc]\nGet top news storiesR.\n\n";
+      $body .= "ups tracking-number\nObtain tracking information for a UPS shipment.\n\n";
+      $body .= "help\nGet a copy of this text.\n\n";
+      $body .= "bible [version] reference\nGet a passage from the Bible.\nVersions provided: AV (King James), ESV, NIV, NASB, NRSV, RSV, WEB, YOUNG\n\n";
+      $body .= "quotes word\nGet quotes about a word.\n\n";
+      $body .= "c2 page\nGet a page from the c2.com wiki.\n\n";
+      $body .= "man page\nGet a manpage.\n\n";
+      $body .= "ustime\nGet the current date and time for all timezones in the US.\n\n";
+      $body .= "- - - - BETA SERVICES - - - -\n\n";
+      $body .= "en2es [word | phrase]\nTranslate English to Spanish\n\n";
+      $body .= "es2en [word | phrase]\nTranslate Spanish to English\n\n";
+      $body .= "cal\nGet a calendar of the current month\n\n";
+      $body .= "zip zipcode\nGet information on the selected zipcode\n\n";
+      $type = "help";
+      $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+      mail($who, "Help on using Ent" . $subject, $body, $header);
+    }
+  }
+?>
+

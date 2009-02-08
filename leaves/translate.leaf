@@ -1,0 +1,53 @@
+<?php
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   +-----  .    .  -------
+   |       |\   |     |
+   +---    | \  |     |
+   |       |  \ |     |
+   +-----  |   \|     |
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Usage:
+     en2es text
+     es2en text
+
+   Returns:
+     translated ext
+
+   Author:
+     Charles Childers  <charles.childers@gmail.com>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  if ($type == "none")
+  {
+    $a = preg_match('/Subject: [eE][nN]2[eE][sS] (.*)$/m', $message, $matches);
+    $subject = $matches[1];
+    if ($a == 1)
+    {
+      $type = "translate";
+      $src = str_replace(" ", "%20", $subject);
+      $html = get_url_contents("http://ajax.googleapis.com/ajax/services/language/translate?v=1.0&q=" . $src . "&langpair=en%7Ces");
+      $body = html2text($html);
+      $filter = str_replace('{"responseData": {"translatedText":"', '', $body);
+      $body = str_replace('"}, "responseDetails": null, "responseStatus": 200}', '', $filter);
+      $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+      mail($who, "translation results", $body, $header);
+    }
+  }
+
+
+  if ($type == "none")
+  {
+    $a = preg_match('/Subject: [eE][sS]2[eE][nN] (.*)$/m', $message, $matches);
+    $subject = $matches[1];
+    if ($a == 1)
+    {
+      $type = "translate";
+      $src = str_replace(" ", "%20", $subject);
+      $html = get_url_contents("http://ajax.googleapis.com/ajax/services/language/translate?v=1.0&q=" . $src . "&langpair=es%7Cen");
+      $body = html2text($html);
+      $filter = str_replace('{"responseData": {"translatedText":"', '', $body);
+      $body = str_replace('"}, "responseDetails": null, "responseStatus": 200}', '', $filter);
+      $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+      mail($who, "translation results", $body, $header);
+    }
+  }
+?>

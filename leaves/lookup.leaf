@@ -1,0 +1,33 @@
+<?php
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   +-----  .    .  -------
+   |       |\   |     |
+   +---    | \  |     |
+   |       |  \ |     |
+   +-----  |   \|     |
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Usage:
+     lookup word
+     lookup phrase
+
+   Returns:
+     Wikipedia article for the requested word or phrase
+
+   Author:
+     Charles Childers  <charles.childers@gmail.com>
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  if ($type == "none")
+  {
+    $a = preg_match('/Subject: [lL][oO][oO][kK][uU][pP] (.*)$/m', $message, $matches);
+    $subject = $matches[1];
+    if ($a == 1)
+    {
+      $url = str_replace(" ", "%20", $subject);
+      $type = "lookup";
+      $html = get_url_contents("http://en.wikipedia.org/w/index.php?printable=yes&title=" . $url);
+      $body = html2text($html);
+      $header = "From: Ent <ent@retroforth.org>\r\n"; //optional headerfields
+      mail($who, "Wikipedia: " . $subject, $body, $header);
+    }
+  }
+?>
